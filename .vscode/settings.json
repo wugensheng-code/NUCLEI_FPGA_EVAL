@@ -1,0 +1,5 @@
+{
+    "files.exclude": {
+        "**/packages/nuclei_sdk-latest/OS": true
+    }
+}

@@ -1,0 +1,47 @@
+{
+    "configurations": [
+        {
+            "name": "Win32",
+            "defines": [
+                "-DDOWNLOAD_MODE=DOWNLOAD_MODE_ILM",
+                "-DDOWNLOAD_MODE_STRING=\"ILM\"",
+                "-DNUCLEI_BANNER=0",
+                "-DRTOS_RTTHREAD",
+                "HAVE_CCONFIG_H",
+                "RT_USING_LIBC",
+                "RT_USING_NEWLIB",
+                "_POSIX_C_SOURCE=1",
+                "_REENT_SMALL",
+                "__RTTHREAD__"
+            ],
+            "intelliSenseMode": "clang-x64",
+            "compilerPath": "/opt/toolchain/riscv-gcc/bin/riscv-nuclei-elf-gcc",
+            "cStandard": "c99",
+            "cppStandard": "c++11",
+            "includePath": [
+                "applications",
+                "rt-thread/components/libc/compilers/common/include",
+                "rt-thread/components/libc/compilers/newlib",
+                "rt-thread/libcpu/risc-v/nuclei",
+                "rt-thread/components/drivers/include",
+                "board",
+                "libraries/demosoc/HAL_Drivers",
+                "rt-thread/components/dfs/include",
+                "rt-thread/components/dfs/filesystems/devfs",
+                "rt-thread/components/finsh",
+                ".",
+                "rt-thread/include",
+                "packages/nuclei_sdk-latest/NMSIS/Core/Include",
+                "packages/nuclei_sdk-latest/NMSIS/DSP/Include",
+                "packages/nuclei_sdk-latest/NMSIS/NN/Include",
+                "packages/nuclei_sdk-latest/SoC/demosoc/Common/Include",
+                "packages/nuclei_sdk-latest/SoC/demosoc/Common/Source/Stubs",
+                "packages/nuclei_sdk-latest/SoC/demosoc/Board/nuclei_fpga_eval/Include",
+                "rt-thread/components/libc/posix/io/poll",
+                "rt-thread/components/libc/posix/io/stdio",
+                "rt-thread/components/libc/posix/ipc"
+            ],
+            "compileCommands": "compile_commands.json"
+        }
+    ]
+}
