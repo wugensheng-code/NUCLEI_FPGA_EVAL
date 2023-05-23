@@ -1,5 +1,14 @@
 {
     "files.exclude": {
         "**/packages/nuclei_sdk-latest/OS": true
+    },
+    "files.associations": {
+        "nuclei_sdk_soc.h": "c",
+        "demosoc.h": "c",
+        "demosoc_uart.h": "c",
+        "type_traits": "c",
+        "board.h": "c",
+        "cpuport.h": "c",
+        "rtthread.h": "c"
     }
 }

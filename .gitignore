@@ -79,3 +79,6 @@ rtthread.elf
 rtthread.bin
 .sconsign.dblite
 .compile_commands.json
+rtthread.map
+compile_commands.json
+*.o

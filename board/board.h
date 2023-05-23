@@ -13,6 +13,7 @@
 #define __BOARD__
 
 #include "nuclei_sdk_hal.h"
+#include "al_intr.h"
 
 void rt_hw_board_init(void);
 

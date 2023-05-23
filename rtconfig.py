@@ -14,7 +14,7 @@ if CROSS_TOOL == 'gcc':
     if platform.system().lower() == "windows":
         EXEC_PATH 	= 'D:/NucleiStudio/toolchain/gcc/bin'
     else:
-        EXEC_PATH 	= '/opt/toolchain/riscv-gcc/bin/'
+        EXEC_PATH 	= '/home/chenyu.wang/Nuclei/gcc/bin/'
     if os.path.exists(EXEC_PATH) == False:
         print("Warning: Toolchain path %s doesn't exist, assume it is already in PATH" % EXEC_PATH)
         EXEC_PATH = '' # Don't set path if not exist
@@ -32,7 +32,7 @@ NUCLEI_SDK_BOARD = "nuclei_fpga_eval"
 # DOWNLOAD: https://doc.nucleisys.com/nuclei_sdk/develop/buildsystem.html#download
 NUCLEI_SDK_DOWNLOAD = "ilm"
 # CORE: See https://doc.nucleisys.com/nuclei_sdk/develop/buildsystem.html#core
-NUCLEI_SDK_CORE = "ux600"
+NUCLEI_SDK_CORE = "ux900"
 
 if PLATFORM == 'gcc':
     # toolchains
@@ -58,7 +58,7 @@ if PLATFORM == 'gcc':
     LIBS = ['stdc++']
 
     if BUILD == 'debug':
-        CFLAGS += ' -O2 -ggdb'
+        CFLAGS += ' -O0 -ggdb'
         AFLAGS += ' -ggdb'
     else:
         CFLAGS += ' -O2 -Os'
