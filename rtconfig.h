@@ -21,6 +21,10 @@
 /* kservice optimization */
 
 #define RT_DEBUG
+#define RT_DEBUG_TIMER_CONFIG
+#define RT_DEBUG_TIMER 1
+#define RT_DEBUG_IRQ_CONFIG
+#define RT_DEBUG_IRQ 1
 
 /* Inter-Thread communication */
 

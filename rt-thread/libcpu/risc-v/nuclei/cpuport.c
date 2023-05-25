@@ -175,6 +175,11 @@ void rt_hw_taskswitch(void)
     /* Clear Software IRQ, A MUST */
     SysTimer_ClearSWIRQ();
     rt_thread_switch_interrupt_flag = 0;
+    // make from thread to be to thread
+    // If there is another swi interrupt triggered by other harts
+    // not through rt_hw_context_switch or rt_hw_context_switch_interrupt
+    // the task switch should just do a same task save and restore
+    rt_interrupt_from_thread = rt_interrupt_to_thread;
 }
 
 /**
@@ -186,6 +191,8 @@ void rt_hw_taskswitch(void)
  * - Set software timer interrupt as VECTOR interrupt with lowest interrupt level
  * - Enable these two interrupts
  */
+extern void eclic_msip_handler(void);
+extern void eclic_mtip_handler(void);
 void rt_hw_ticksetup(void)
 {
     uint64_t ticks = SYSTICK_TICK_CONST;
@@ -194,13 +201,16 @@ void rt_hw_ticksetup(void)
     /* Stop and clear the SysTimer. SysTimer as Non-Vector Interrupt */
     SysTick_Config(ticks);
     ECLIC_DisableIRQ(SysTimer_IRQn);
-    ECLIC_SetLevelIRQ(SysTimer_IRQn, RT_KERNEL_INTERRUPT_LEVEL);
+    ECLIC_SetLevelIRQ(SysTimer_IRQn, 1);
     ECLIC_SetShvIRQ(SysTimer_IRQn, ECLIC_NON_VECTOR_INTERRUPT);
+    ECLIC_SetVector(SysTimer_IRQn, eclic_mtip_handler);
     ECLIC_EnableIRQ(SysTimer_IRQn);
 
     /* Set SWI interrupt level to lowest level/priority, SysTimerSW as Vector Interrupt */
+    ECLIC_DisableIRQ(SysTimerSW_IRQn);
     ECLIC_SetShvIRQ(SysTimerSW_IRQn, ECLIC_VECTOR_INTERRUPT);
-    ECLIC_SetLevelIRQ(SysTimerSW_IRQn, RT_KERNEL_INTERRUPT_LEVEL);
+    ECLIC_SetLevelIRQ(SysTimerSW_IRQn, 0);
+    ECLIC_SetVector(SysTimerSW_IRQn, eclic_msip_handler);
     ECLIC_EnableIRQ(SysTimerSW_IRQn);
 }
 

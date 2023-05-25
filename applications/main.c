@@ -1,79 +1,66 @@
 #include <rtthread.h>
 
-#define THREAD_PRIORITY         25
-#define THREAD_STACK_SIZE       512
-#define THREAD_TIMESLICE        5
+#define THREAD_STACK_SIZE   1024
+#define THREAD_PRIORITY     20
+#define THREAD_TIMESLICE    10
 
-static rt_thread_t tid1 = RT_NULL;
+/* 针对每个线程的计数器 */
+volatile rt_uint32_t count[2];
 
-/* 线程 1 的入口函数 */
-static void thread1_entry(void *parameter)
+/* 线程 1、2 共用一个入口，但入口参数不同 */
+static void thread_entry(void* parameter)
 {
-    rt_uint32_t count = 0;
+    rt_uint32_t value;
 
+    value = (rt_uint32_t)parameter;
     while (1)
     {
-        /* 线程 1 采用低优先级运行，一直打印计数值 */
-        rt_kprintf("thread1 count: %d\n", count ++);
-        rt_thread_mdelay(500);
+        rt_kprintf("thread %d is running\n", value);
+        rt_thread_mdelay(500); // 延时一段时间
     }
 }
 
-ALIGN(RT_ALIGN_SIZE)
-static char thread2_stack[1024];
-static struct rt_thread thread2;
-/* 线程 2 入口 */
-static void thread2_entry(void *param)
-{
-    rt_uint32_t count = 0;
+static rt_thread_t tid1 = RT_NULL;
+static rt_thread_t tid2 = RT_NULL;
 
-    /* 线程 2 拥有较高的优先级，以抢占线程 1 而获得执行 */
-    for (count = 0; count < 10 ; count++)
-    {
-        rt_thread_mdelay(1000);
-        /* 线程 2 打印计数值 */
-        rt_kprintf("thread2 count: %d\n", count);
-    }
-    rt_kprintf("thread2 exit\n");
-    /* 线程 2 运行结束后也将自动被系统脱离 */
+static void hook_of_scheduler(struct rt_thread* from, struct rt_thread* to)
+{
+    rt_kprintf("from: %s -->  to: %s \n", from->name , to->name);
 }
 
-/* 线程示例 */
-int thread_sample(void)
+int scheduler_hook(void)
 {
-    /* 创建线程 1，名称是 thread1，入口是 thread1_entry*/
+    /* 设置调度器钩子 */
+    rt_scheduler_sethook(hook_of_scheduler);
+
+    /* 创建线程 1 */
     tid1 = rt_thread_create("thread1",
-                            thread1_entry, RT_NULL,
+                            thread_entry, (void*)1,
                             THREAD_STACK_SIZE,
                             THREAD_PRIORITY, THREAD_TIMESLICE);
-
-    /* 如果获得线程控制块，启动这个线程 */
     if (tid1 != RT_NULL)
         rt_thread_startup(tid1);
 
-    /* 初始化线程 2，名称是 thread2，入口是 thread2_entry */
-    rt_thread_init(&thread2,
-                   "thread2",
-                   thread2_entry,
-                   RT_NULL,
-                   &thread2_stack[0],
-                   sizeof(thread2_stack),
-                   THREAD_PRIORITY - 1, THREAD_TIMESLICE);
-    rt_thread_startup(&thread2);
-
+    /* 创建线程 2 */
+    tid2 = rt_thread_create("thread2",
+                            thread_entry, (void*)2,
+                            THREAD_STACK_SIZE,
+                            THREAD_PRIORITY,THREAD_TIMESLICE - 5);
+    if (tid2 != RT_NULL)
+        rt_thread_startup(tid2);
     return 0;
 }
 
 /* 导出到 msh 命令列表中 */
-// MSH_CMD_EXPORT(thread_sample, thread sample);
+// MSH_CMD_EXPORT(scheduler_hook, scheduler_hook sample);
 
 int main(void)
 {
-    thread_sample();
+    scheduler_hook();
+    printf("hello\n");
     while (1)
     {
-        // rt_thread_mdelay(500);
-        // rt_kprintf("hello\n");
+        // rt_kprintf("main thread is running\n");
+        rt_thread_mdelay(500); // 延时一段时间
     }
-    
 }

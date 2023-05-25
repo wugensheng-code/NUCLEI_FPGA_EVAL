@@ -3,6 +3,7 @@
 #include "al_type.h"
 #include "al_errno.h"
 #include "al_reg_io.h"
+#include <rtthread.h>
 
 /**
  * \brief      Exception Handler Function Typedef
@@ -48,10 +49,10 @@ static AL_INTR_HandlerStruct AL_IrqHandlerList[IRQ_MAX_NUM];
 static void system_default_exception_handler(unsigned long mcause, unsigned long sp)
 {
     /* TODO: Uncomment this if you have implement printf function */
-    printf("MCAUSE : 0x%lx\r\n", mcause);
-    printf("MDCAUSE: 0x%lx\r\n", __RV_CSR_READ(CSR_MDCAUSE));
-    printf("MEPC   : 0x%lx\r\n", __RV_CSR_READ(CSR_MEPC));
-    printf("MTVAL  : 0x%lx\r\n", __RV_CSR_READ(CSR_MTVAL));
+    rt_kprintf("MCAUSE : 0x%lx\r\n", mcause);
+    rt_kprintf("MDCAUSE: 0x%lx\r\n", __RV_CSR_READ(CSR_MDCAUSE));
+    rt_kprintf("MEPC   : 0x%lx\r\n", __RV_CSR_READ(CSR_MEPC));
+    rt_kprintf("MTVAL  : 0x%lx\r\n", __RV_CSR_READ(CSR_MTVAL));
     while (1);
 }
 
@@ -77,14 +78,14 @@ void Exception_Init(void)
  * \param   EXCn    See \ref EXCn_Type
  * \param   exc_handler     The exception handler for this exception code EXCn
  */
-void Exception_Register_EXC(uint32_t EXCn, unsigned long exc_handler)
-{
-    if ((EXCn < MAX_SYSTEM_EXCEPTION_NUM) && (EXCn >= 0)) {
-        SystemExceptionHandlers[EXCn] = exc_handler;
-    } else if (EXCn == NMI_EXCn) {
-        SystemExceptionHandlers[MAX_SYSTEM_EXCEPTION_NUM] = exc_handler;
-    }
-}
+// void Exception_Register_EXC(uint32_t EXCn, unsigned long exc_handler)
+// {
+//     if ((EXCn < MAX_SYSTEM_EXCEPTION_NUM) && (EXCn >= 0)) {
+//         SystemExceptionHandlers[EXCn] = exc_handler;
+//     } else if (EXCn == NMI_EXCn) {
+//         SystemExceptionHandlers[MAX_SYSTEM_EXCEPTION_NUM] = exc_handler;
+//     }
+// }
 
 /**
  * \brief       Get current exception handler for exception code EXCn
@@ -94,16 +95,16 @@ void Exception_Register_EXC(uint32_t EXCn, unsigned long exc_handler)
  * \param   EXCn    See \ref EXCn_Type
  * \return  Current exception handler for exception code EXCn, if not found, return 0.
  */
-unsigned long Exception_Get_EXC(uint32_t EXCn)
-{
-    if ((EXCn < MAX_SYSTEM_EXCEPTION_NUM) && (EXCn >= 0)) {
-        return SystemExceptionHandlers[EXCn];
-    } else if (EXCn == NMI_EXCn) {
-        return SystemExceptionHandlers[MAX_SYSTEM_EXCEPTION_NUM];
-    } else {
-        return 0;
-    }
-}
+// unsigned long Exception_Get_EXC(uint32_t EXCn)
+// {
+//     if ((EXCn < MAX_SYSTEM_EXCEPTION_NUM) && (EXCn >= 0)) {
+//         return SystemExceptionHandlers[EXCn];
+//     } else if (EXCn == NMI_EXCn) {
+//         return SystemExceptionHandlers[MAX_SYSTEM_EXCEPTION_NUM];
+//     } else {
+//         return 0;
+//     }
+// }
 
 /**
  * \brief      Common NMI and Exception handler entry
@@ -116,23 +117,23 @@ unsigned long Exception_Get_EXC(uint32_t EXCn)
  * - For the core_exception_handler template, we provided exception register function \ref Exception_Register_EXC
  *   which can help developer to register your exception handler for specific exception number.
  */
-uint32_t core_exception_handler(unsigned long mcause, unsigned long sp)
-{
-    uint32_t EXCn = (uint32_t)(mcause & 0X00000fff);
-    EXC_HANDLER exc_handler;
+// uint32_t core_exception_handler(unsigned long mcause, unsigned long sp)
+// {
+//     uint32_t EXCn = (uint32_t)(mcause & 0X00000fff);
+//     EXC_HANDLER exc_handler;
 
-    if ((EXCn < MAX_SYSTEM_EXCEPTION_NUM) && (EXCn >= 0)) {
-        exc_handler = SystemExceptionHandlers[EXCn];
-    } else if (EXCn == NMI_EXCn) {
-        exc_handler = SystemExceptionHandlers[MAX_SYSTEM_EXCEPTION_NUM];
-    } else {
-        exc_handler = system_default_exception_handler;
-    }
-    if (exc_handler != NULL) {
-        exc_handler(mcause, sp);
-    }
-    return 0;
-}
+//     if ((EXCn < MAX_SYSTEM_EXCEPTION_NUM) && (EXCn >= 0)) {
+//         exc_handler = SystemExceptionHandlers[EXCn];
+//     } else if (EXCn == NMI_EXCn) {
+//         exc_handler = SystemExceptionHandlers[MAX_SYSTEM_EXCEPTION_NUM];
+//     } else {
+//         exc_handler = system_default_exception_handler;
+//     }
+//     if (exc_handler != NULL) {
+//         exc_handler(mcause, sp);
+//     }
+//     return 0;
+// }
 /** @} */ /* End of Doxygen Group NMSIS_Core_ExceptionAndNMI */
 
 
@@ -145,14 +146,14 @@ uint32_t core_exception_handler(unsigned long mcause, unsigned long sp)
  * Vendor could also change the initialization
  * configuration.
  */
-void ECLIC_Init(void)
-{
-    /* Global Configuration about MTH and NLBits.
-     * TODO: Please adapt it according to your system requirement.
-     * This function is called in _init function */
-    ECLIC_SetMth(0);
-    ECLIC_SetCfgNlbits(__ECLIC_INTCTLBITS);
-}
+// void ECLIC_Init(void)
+// {
+//     /* Global Configuration about MTH and NLBits.
+//      * TODO: Please adapt it according to your system requirement.
+//      * This function is called in _init function */
+//     ECLIC_SetMth(0);
+//     ECLIC_SetCfgNlbits(__ECLIC_INTCTLBITS);
+// }
 
 /**
  * \brief  Initialize a specific IRQ and register the handler
@@ -187,7 +188,7 @@ int32_t ECLIC_Register_IRQ(IRQn_Type IRQn, uint8_t shv, ECLIC_TRIGGER_Type trig_
     ECLIC_SetPriorityIRQ(IRQn, priority);
     if (handler != NULL) {
         /* set interrupt handler entry to vector table */
-        ECLIC_SetVector(IRQn, (rv_csr_t)handler);
+        ECLIC_SetVector(IRQn, (rv_csr_t)&handler->Func);
         AL_IrqHandlerList[IRQn] = *handler;
     }
     /* enable interrupt */

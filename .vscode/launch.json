@@ -23,7 +23,7 @@
                 },
             ],
             "miDebuggerPath": "/opt/toolchain/riscv-gcc/bin/riscv-nuclei-elf-gdb",
-            "miDebuggerServerAddress": "10.8.9.4:3333",
+            "miDebuggerServerAddress": "10.8.9.6:3333",
             "useExtendedRemote": true,
             "stopAtConnect": true,
             "postRemoteConnectCommands": [

@@ -9,6 +9,9 @@
         "type_traits": "c",
         "board.h": "c",
         "cpuport.h": "c",
-        "rtthread.h": "c"
+        "rtthread.h": "c",
+        "nuclei_sdk_hal.h": "c",
+        "rtdbg.h": "c",
+        "functional": "c"
     }
 }

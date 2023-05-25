@@ -46,18 +46,25 @@ void rt_hw_board_init(void)
     /* OS Tick Configuration */
     rt_hw_ticksetup();
     // // initialize software interrupt as vector interrupt
-    // AlIntr_RegHandler(SysTimerSW_IRQn, &SysTimerSWAttr, (AL_INTR_Func *)eclic_msip_handler, AL_NULL);
+    // AlIntr_RegHandler(SysTimerSW_IRQn, AL_NULL, (AL_INTR_Func *)eclic_msip_handler, AL_NULL);
 
     // // inital timer interrupt as non-vector interrupt
     // AlIntr_RegHandler(SysTimer_IRQn, &SysTimerAttr, (AL_INTR_Func *)eclic_mtip_handler, AL_NULL);
 
     // initialize software interrupt as vector interrupt
-    ECLIC_Register_IRQ(SysTimerSW_IRQn, ECLIC_VECTOR_INTERRUPT,
-                                    ECLIC_LEVEL_TRIGGER, 1, 0, eclic_msip_handler);
+    // ECLIC_Register_IRQ(SysTimerSW_IRQn, ECLIC_VECTOR_INTERRUPT,
+    //                                 ECLIC_LEVEL_TRIGGER, 1, 0, eclic_msip_handler);
 
-    // inital timer interrupt as non-vector interrupt
-    ECLIC_Register_IRQ(SysTimer_IRQn, ECLIC_NON_VECTOR_INTERRUPT,
-                                    ECLIC_LEVEL_TRIGGER, 2, 0, eclic_mtip_handler);
+    // // inital timer interrupt as non-vector interrupt
+    // ECLIC_Register_IRQ(SysTimer_IRQn, ECLIC_NON_VECTOR_INTERRUPT,
+    //                                 ECLIC_LEVEL_TRIGGER, 1, 0, eclic_mtip_handler);
+
+
+    // /* set interrupt handler entry to vector table */
+    // ECLIC_SetVector(SysTimerSW_IRQn, (rv_csr_t)eclic_msip_handler);
+    
+    // /* set interrupt handler entry to vector table */
+    // ECLIC_SetVector(SysTimer_IRQn, (rv_csr_t)eclic_mtip_handler);
 
     /* enable interrupt */
     __enable_irq();
@@ -102,7 +109,5 @@ void rt_hw_console_output(const char* str)
 
     rt_exit_critical();
 }
-
-
 /******************** end of file *******************/
 
