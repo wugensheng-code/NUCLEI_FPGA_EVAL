@@ -1,4 +1,5 @@
 #include <rtthread.h>
+#include <stdio.h>
 
 #define THREAD_STACK_SIZE   1024
 #define THREAD_PRIORITY     20
@@ -56,6 +57,7 @@ int scheduler_hook(void)
 
 int main(void)
 {
+    printf("RT-Thread\n");
     scheduler_hook();
     printf("hello\n");
     while (1)

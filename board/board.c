@@ -13,6 +13,8 @@
 #include "board.h"
 #include "cpuport.h"
 #include <unistd.h>
+#include <stdio.h>
+#include "al_log.h"
 
 #ifdef RT_USING_SERIAL
     #include <rtdevice.h>
@@ -103,9 +105,9 @@ void rt_hw_console_output(const char* str)
     
     size = rt_strlen(str);
 
-    _write(STDOUT_FILENO, str, size);
+    AlLog_Write(str, size);
 
-    _write(STDOUT_FILENO, &cr, 1);
+    AlLog_Write(&cr, 1);
 
     rt_exit_critical();
 }
