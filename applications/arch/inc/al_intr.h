@@ -58,7 +58,7 @@ typedef struct
 #if (defined __riscv || defined __riscv__)
 #define AL_DEFAULT_ATTR(name)  AL_INTR_AttrStrct name = {   \
             .TrigMode   =  LEVEL_HIGH_TRIGGER,              \
-            .Priority   =  1,                               \
+            .Priority   =  0,                               \
             .VectorMode =  NON_VECTOR_INTERRUPT,            \
 };
 #else

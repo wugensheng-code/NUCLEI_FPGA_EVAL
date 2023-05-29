@@ -15,17 +15,16 @@
 #include <drv_config.h>
 
 /* config class */
-struct hbird_uart_config
+struct al9000_uart_config
 {
     const char *name;
-    UART_TypeDef *uart;
-    IRQn_Type irqn;
+    AL_UART_DevStruct *uart;
 };
 
 /* hbird uart dirver class */
-struct hbird_uart
+struct al9000_uart
 {
-    struct hbird_uart_config *config;
+    struct al9000_uart_config *config;
     struct rt_serial_device serial;
 };
 

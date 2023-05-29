@@ -12,6 +12,9 @@
         "rtthread.h": "c",
         "nuclei_sdk_hal.h": "c",
         "rtdbg.h": "c",
-        "functional": "c"
+        "functional": "c",
+        "drv_uart.h": "c",
+        "drv_config.h": "c",
+        "al_intr.h": "c"
     }
 }

@@ -147,7 +147,7 @@ exc_entry:
     SAVE_CONTEXT
     /* Save the necessary CSR registers */
     SAVE_CSR_CONTEXT
-
+    DISABLE_MIE
     /*
      * Set the exception handler function arguments
      * argument 1: mcause value

@@ -35,10 +35,6 @@ extern void *_heap_end;
  */
 
 extern void _init(void);
-extern void eclic_msip_handler(void);
-extern void eclic_mtip_handler(void);
-extern int32_t ECLIC_Register_IRQ(IRQn_Type IRQn, uint8_t shv, ECLIC_TRIGGER_Type trig_mode, uint8_t lvl, uint8_t priority, AL_INTR_HandlerStruct* handler);
-
 /**
  * @brief Setup hardware board for rt-thread
  *
@@ -47,26 +43,6 @@ void rt_hw_board_init(void)
 {
     /* OS Tick Configuration */
     rt_hw_ticksetup();
-    // // initialize software interrupt as vector interrupt
-    // AlIntr_RegHandler(SysTimerSW_IRQn, AL_NULL, (AL_INTR_Func *)eclic_msip_handler, AL_NULL);
-
-    // // inital timer interrupt as non-vector interrupt
-    // AlIntr_RegHandler(SysTimer_IRQn, &SysTimerAttr, (AL_INTR_Func *)eclic_mtip_handler, AL_NULL);
-
-    // initialize software interrupt as vector interrupt
-    // ECLIC_Register_IRQ(SysTimerSW_IRQn, ECLIC_VECTOR_INTERRUPT,
-    //                                 ECLIC_LEVEL_TRIGGER, 1, 0, eclic_msip_handler);
-
-    // // inital timer interrupt as non-vector interrupt
-    // ECLIC_Register_IRQ(SysTimer_IRQn, ECLIC_NON_VECTOR_INTERRUPT,
-    //                                 ECLIC_LEVEL_TRIGGER, 1, 0, eclic_mtip_handler);
-
-
-    // /* set interrupt handler entry to vector table */
-    // ECLIC_SetVector(SysTimerSW_IRQn, (rv_csr_t)eclic_msip_handler);
-    
-    // /* set interrupt handler entry to vector table */
-    // ECLIC_SetVector(SysTimer_IRQn, (rv_csr_t)eclic_mtip_handler);
 
     /* enable interrupt */
     __enable_irq();
@@ -98,18 +74,35 @@ extern ssize_t _write(int fd, const void* ptr, size_t len);
 
 void rt_hw_console_output(const char* str)
 {
-    rt_size_t size = 0;
-    char cr = '\r';
+    // rt_size_t size = 0;
+    // rt_int32_t ret = RT_EOK;
+    // char cr = '\r';
 
-    rt_enter_critical();
+    // rt_enter_critical();
     
-    size = rt_strlen(str);
+    // size = rt_strlen(str);
 
-    AlLog_Write(str, size);
+    // ret = AlLog_Write(str, size);
+    // if(ret != RT_EOK)
+    // {
+    //     while (1)
+    //     {
+    //         /* code */
+    //     }
+        
+    // }
 
-    AlLog_Write(&cr, 1);
-
-    rt_exit_critical();
+    // ret = AlLog_Write(&cr, 1);
+    // if(ret != RT_EOK)
+    // {
+    //     while (1)
+    //     {
+    //         /* code */
+    //     }
+                
+    // }
+    
+    // rt_exit_critical();
 }
 /******************** end of file *******************/
 

@@ -14,6 +14,7 @@
 
 #include "nuclei_sdk_hal.h"
 #include "al_intr.h"
+#include "al_uart_dev.h"
 
 void rt_hw_board_init(void);
 

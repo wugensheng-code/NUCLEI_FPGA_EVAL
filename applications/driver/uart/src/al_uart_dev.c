@@ -557,6 +557,8 @@ static AL_VOID AlUart_Dev_BusBusyHandler(AL_UART_DevStruct *Uart)
 */
 AL_VOID AlUart_Dev_IntrHandler(AL_VOID *Instance)
 {
+    rt_interrupt_enter();
+
     AL_UART_DevStruct *Uart = (AL_UART_DevStruct *)Instance;
     AL_UART_InterruptEnum IntrStatus = AlUart_ll_GetIntrStatus(Uart->BaseAddr);
 
@@ -569,4 +571,6 @@ AL_VOID AlUart_Dev_IntrHandler(AL_VOID *Instance)
     } else if (UART_IN_BUSY_DETECT_INTR(IntrStatus)) {
         AlUart_Dev_BusBusyHandler(Uart);
     } else ;
+
+    rt_interrupt_leave();
 }
